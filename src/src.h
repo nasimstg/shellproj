@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
 #include <unistd.h>
@@ -21,7 +22,6 @@
 
 
 void getLocation();
-void printWelcome();
 void logout(char *str);
 char *path_builder(char **args, int num_args);
 void cd(char **args);

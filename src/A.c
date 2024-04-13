@@ -19,28 +19,37 @@ void getLocation()
     printf("%s%s%s@%s%s%s:%s%s%s%s$ ", GREEN, BOLD, username, GREEN, BOLD, hostname, BLUE, BOLD, cwd, RESET);
 }
 
+#include <string.h>
+#include <stdlib.h>
+
 char **splitArgument(char *line)
 {
-    char **args = malloc(100 * sizeof(char *));
-    int i = 0;
+    int bufferSize = 100;
+    int position = 0;
+    char **tokens = malloc(bufferSize * sizeof(char*));
+    char *token;
 
-    char *line_copy = strdup(line);
-    char *start = line_copy;
-    char *end = start;
-    int in_quotes = 0;
-
-    while (*end != '\0') {
-        if (*end == '\"') {
-            in_quotes = !in_quotes;
-        } else if ((*end == ' ' || *end == '\t' || *end == '\n') && !in_quotes) {
-            *end = '\0';
-            args[i++] = start;
-            start = end + 1;
-        }
-        end++;
+    if (!tokens) {
+        fprintf(stderr, "Allocation error\n");
+        exit(EXIT_FAILURE);
     }
-    args[i++] = start;
-    args[i] = NULL;
 
-    return args;
+    token = strtok(line, " \t\r\n\a");
+    while (token != NULL) {
+        tokens[position] = token;
+        position++;
+
+        if (position >= bufferSize) {
+            bufferSize += 100;
+            tokens = realloc(tokens, bufferSize * sizeof(char*));
+            if (!tokens) {
+                fprintf(stderr, "Allocation error\n");
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        token = strtok(NULL, " \t\r\n\a");
+    }
+    tokens[position] = NULL;
+    return tokens;
 }

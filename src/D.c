@@ -103,28 +103,33 @@ void word_line_count(char **args)
         return;
     }
 
-    FILE *fptr;
     char *path = path_builder(&args[1], 1);
-    char ch;
-    int lines = 1, words = 1, characters = 1;
-
-    fptr = fopen(path, "r");
+    FILE *fptr = fopen(path, "r");
     if (fptr == NULL)
     {
         printf("Unable to open file.\n");
         return;
     }
 
+    int lines = 0, words = 0, characters = 0;
+    char ch;
+    bool in_word = false;
+
     while ((ch = fgetc(fptr)) != EOF)
     {
         characters++;
-        if (ch == '\n' || ch == '\0')
+        if (ch == '\n')
         {
             lines++;
         }
-        if (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\0')
+        if (ch == ' ' || ch == '\t' || ch == '\n')
+        {
+            in_word = false;
+        }
+        else if (!in_word)
         {
             words++;
+            in_word = true;
         }
     }
 
@@ -135,10 +140,6 @@ void word_line_count(char **args)
     else if (strcmp(args[0], "-w") == 0)
     {
         printf("%d %s\n", words, path);
-    }
-    else
-    {
-        printf("Invalid option\n");
     }
 
     fclose(fptr);

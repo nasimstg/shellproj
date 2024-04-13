@@ -21,46 +21,46 @@ int main()
     printf("                           ccaacs\n");
     printf("                                          using\n");
 
-    char *line = NULL;
-
     do
     {
         getLocation();
 
+        char *line = NULL;
         size_t len = 0;
-        getline(&line, &len, stdin);
+        if (getline(&line, &len, stdin) == -1)
+        {
+            break;
+        }
 
         line[strcspn(line, "\n")] = 0;
 
         char **tokens = splitArgument(line);
+        char **argv1 = tokens;
+        char **argv2 = NULL;
 
-        int i;
-        for (i = 0; tokens[i] != NULL; i++)
+        for (int i = 0; tokens[i] != NULL; i++)
         {
             if (strcmp(tokens[i], "|") == 0)
             {
+                tokens[i] = NULL;
+                argv2 = &tokens[i + 1];
                 break;
             }
         }
 
-        if (tokens[i] != NULL)
+        if (argv2)
         {
-            tokens[i] = NULL;
-            char **argv1 = tokens;
-            char **argv2 = &tokens[i + 1];
-
             mypipe(argv1, argv2);
         }
         else
         {
-            char *cmd = tokens[0];
-            char **args = &tokens[1];
-            execmd(cmd, args);
+            execmd(argv1[0], &argv1[1]);
         }
 
         free(tokens);
+        free(line);
 
-    } while (line != NULL);
+    } while (1);
 
     return 0;
 }

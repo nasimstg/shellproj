@@ -2,11 +2,10 @@
 
 void logout(char *str)
 {
-    if (str == NULL)
+    if (str != NULL)
     {
-        exit(0);
+        printf("%s\n", str);
     }
-    printf("%s\n", str);
     exit(0);
 }
 
@@ -21,7 +20,7 @@ void cd(char **args)
     char *path = NULL;
 
 
-    path = build_path(args, num_args);
+    path = path_builder(args, num_args);
 
     if (chdir(path) != 0)
     {
@@ -29,8 +28,6 @@ void cd(char **args)
     }
 }
 
-
-#define BUF_SIZE 1024
 
 void copy_file(char **args)
 {
@@ -46,25 +43,30 @@ void copy_file(char **args)
         return;
     }
 
-    char *source_path = build_path(&args[0], 1);
-    char *destination_path = build_path(&args[1], 1);
+    char *source_path = path_builder(&args[0], 1);
+    char *destination_path = path_builder(&args[1], 1);
 
     FILE *source, *destination;
-    char buf[BUF_SIZE];
-    size_t bytes_read, bytes_written;
+    int ch;
 
     source = fopen(source_path, "r");
-    destination = fopen(destination_path, "w");
-
-    while ((bytes_read = fread(buf, 1, BUF_SIZE, source)) > 0)
+    if (source == NULL)
     {
-        bytes_written = fwrite(buf, 1, bytes_read, destination);
-        if (bytes_written != bytes_read)
-        {
-            fclose(source);
-            fclose(destination);
-            return;
-        }
+        fprintf(stderr, "CP: Unable to open source file\n");
+        return;
+    }
+
+    destination = fopen(destination_path, "w");
+    if (destination == NULL)
+    {
+        fprintf(stderr, "CP: Unable to open destination file\n");
+        fclose(source);
+        return;
+    }
+
+    while ((ch = fgetc(source)) != EOF)
+    {
+        fputc(ch, destination);
     }
 
     fclose(source);
