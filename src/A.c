@@ -1,4 +1,23 @@
-#include "util.h"
+#include "src.h"
+
+void getLocation()
+{
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) != NULL)
+    {/**/}
+    else
+    {
+        perror("getcwd() error");
+    }
+
+    char username[1024];
+    getlogin_r(username, sizeof(username));
+
+    char hostname[1024];
+    gethostname(hostname, sizeof(hostname));
+
+    printf("%s%s%s@%s%s%s:%s%s%s%s$ ", GREEN, BOLD, username, GREEN, BOLD, hostname, BLUE, BOLD, cwd, RESET);
+}
 
 char **splitArgument(char *line)
 {

@@ -1,4 +1,28 @@
-#include "util.h"
+#include "src.h"
+
+void delete_file(char **args)
+{
+    int num_args = 0;
+    while (args[num_args] != NULL)
+    {
+        num_args++;
+    }
+
+    if (num_args < 1)
+    {
+        fprintf(stderr, "Missing source\n");
+        return;
+    }
+
+    char *path = path_builder(args, num_args);
+
+    if (remove(path) != 0)
+    {
+        perror("Unable to delete file");
+        return;
+    }
+}
+
 
 void mypipe(char **argv1, char **argv2)
 {

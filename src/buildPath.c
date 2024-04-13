@@ -1,6 +1,6 @@
-#include "util.h"
+#include "src.h"
 
-char *build_path(char **args, int num_args)
+char *path_builder(char **args, int num_args)
 {
     int total_length = 0;
     for (int i = 0; i < num_args; i++){

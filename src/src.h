@@ -1,5 +1,5 @@
-#ifndef UTIL_H
-    #define UTIL_H
+#ifndef SRC_H
+    #define SRC_H
 #endif
 
 #include <stdio.h>
@@ -23,7 +23,7 @@
 void getLocation();
 void printWelcome();
 void logout(char *str);
-char *build_path(char **args, int num_args);
+char *path_builder(char **args, int num_args);
 void cd(char **args);
 void copy_file(char **args);
 void move_file(char **args);

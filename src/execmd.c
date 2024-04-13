@@ -1,4 +1,4 @@
-#include "util.h"
+#include "src.h"
 
 void execmd(char *cmd, char **args)
 {
@@ -41,24 +41,6 @@ void execmd(char *cmd, char **args)
 
     else
     {
-        printf("Trying to run sys cmd\n");
-        pid_t pid = fork();
-        if (pid < 0)
-        {
-            perror("fork failed");
-        }
-        else if (pid == 0)
-        {
-            // This is the child process. Call execvp here.
-            execvp(cmd, args);
-            perror("execvp failed");
-            exit(EXIT_FAILURE);
-        }
-        else
-        {
-            // This is the parent process. Wait for the child to finish.
-            int status;
-            waitpid(pid, &status, 0);
-        }
+        printf("Command Not avilable...\n");
     }
 }
