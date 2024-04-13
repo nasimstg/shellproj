@@ -1,6 +1,6 @@
 .*
-!.gitignore
-!.gitattributes
+.gitignore
+.gitattributes
 
 # Prerequisites
 *.d
